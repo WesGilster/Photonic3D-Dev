@@ -55,26 +55,17 @@
 
         <script src="js/moment.min.js"></script>
 		
+		<script src="js/printflow.js"></script>
+		<script src="js/printerconfig.js"></script>
+		
 		<link href="css/printflow.css" rel="stylesheet">
     </head>
     <body style="background-color: black;" onload="fillList();">
 		<script>
 			test="";
-			printStatus="";
-			$.getJSON("../services/printJobs/getByPrinterName/Photocentric%2010").done(function (data){
-					printStatus= (data.status);
-				});
-			setInterval(function() {
-				if (printStatus=="Printing"){
-					window.location.href="printdialogue.html";
-				}
-				document.getElementById("time").innerHTML = moment().format("HH:mm:ss[<br>]DD-MMM-YY");
-				
-				$.getJSON("../services/printJobs/getByPrinterName/Photocentric%2010").done(function (data){
-					printStatus= (data.status);
-				});
-				
-			}, 1000);
+
+			startpage();
+
 			function startPrint(){
 				if (document.getElementById("printables").selectedIndex <0){
 					//do nothing
@@ -85,7 +76,7 @@
 				}
 				else{
 					$.post("../services/printables/print/"+$("#printables").val())
-					.done(function(data){
+					.done(function(){
 					window.location.href="printdialogue.html";
 				});
 				}
@@ -122,7 +113,7 @@
 					<area  alt="" title="WPS Setup" shape="rect" coords="252,268,548,324" style="outline:none;" target="_self" onClick="startPrint();"    />
 				</map>
 				<div name="time" id="time" class="time"><script>document.write(moment().format("HH:mm:ss[<br>]DD-MMM-YY"));</script></div>
-				<img name="wifi" id="wifi" class="wifi" src="images/wifi.png">
+				<img name="wifi" id="wifi" class="wifi" src="images/wifi-0.png">
 				<img name="homehighlight" id="homehighlight" class="homehighlight" src="images/homehighlightANIM.png" onClick="location.href='index.html';">
 				<img name="bigbuttonhighlight" id="bigbuttonhighlight" class="bigbuttonhighlight" src="images/bigbuttonANIM.png" onClick="startPrint();">
 				<div name="printlabel" class="printlabel" id="printlabel" onClick="startPrint();">Print</div>
