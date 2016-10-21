@@ -3,13 +3,13 @@
         <title>Maintain</title>
         <style>
 
-		.zheight { 
+		.layerheight { 
 			position: absolute; 
 			top: 140px; 
 			left: 630px; 
 			color: white;
 		}
-		.layerheight { 
+		.zheight { 
 			position: absolute; 
 			top: 185px; 
 			left: 630px; 
@@ -63,6 +63,7 @@
 			function homez() {
 				$.getJSON('../services/printers/homeZ/'+printerName);
 				document.getElementById("zdata").innerHTML= 0;
+				$('#zheight').show();
 			}
 			function getLayerData(){
 				layerdata = 0;
@@ -88,7 +89,7 @@
 				</map>
 				<div name="time" id="time" class="time"><script>document.write(moment().format("HH:mm:ss[<br>]DD-MMM-YY"));</script></div>
 				<img name="wifi" id="wifi" class="wifi" src="images/wifi-0.png">
-				<div name="zheight" id="zheight" class="zheight">Current Z Height:<br><span name="zdata" id="zdata">0</span> mm</div>
+				<div name="zheight" id="zheight" class="zheight collapse">Current Z Height:<br><span name="zdata" id="zdata">0</span> mm</div>
 				<div name="layerheight" id="layerheight" class="layerheight">Print Layer Height:<br><span name="ldata" id="ldata">__</span> microns</div>
 				<div name="warn" id="warn" class="warn"><div id="warning" role="alert" class="alert alert-danger collapse" ><strong>Error</strong><br>Cannot move past Z axis limits!</div></div>
 				
