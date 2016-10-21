@@ -6,8 +6,15 @@
 # $3 - temperature warning
 # $4 - temperature error
 
-filename=log-$(date "+%y-%m-%d").dat
-touch $filename
+#check if superuser
+if [[ $UID != 0 ]]; then
+    echo "Please run this script with sudo:"
+    echo "sudo $0 $*"
+    exit 1
+fi
+
+filename=pilog-$(date "+%y-%m-%d").log
+touch /opt/cwh/$filename
 
 defaultsleeptime=15s
 #parameterising so that the script can log more regularly if warnings are triggered
@@ -29,7 +36,7 @@ while true; do
 	gpuTemp0=${gpuTemp0//\'/º}
 	gpuTemp0=${gpuTemp0//temp=/}
 	timestamp=$(date "+%d/%m/%y %H:%M:%S")
-	echo "["$timestamp"] Curr mem: "$mem", Max Mem: "$max". CPU Temp: "$cpuTemp1"."$cpuTempM"ºC GPU Temp: "$gpuTemp0 >> $filename
+	echo "["$timestamp"] Curr mem: "$mem", Max Mem: "$max". CPU Temp: "$cpuTemp1"."$cpuTempM"ºC GPU Temp: "$gpuTemp0 >> /opt/cwh/$filename
 	
 	#do error checking
 
