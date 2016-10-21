@@ -67,7 +67,10 @@ function printredirect(){
 			}
 		}
                 if (printStatus=="Cancelled"){
-                        // just in case
+                         if ((typeof Cookies.get('lastcancelledjob') === 'undefined')||(Cookies.get('lastcancelledjob')!=jobId)){
+                                Cookies.set('lastcancelledjob',jobId);
+                                window.location.href=("error.html?type=info&errorname=Print Cancelled&errordetails=The print of "+runningjobName+" [Job ID: "+jobId+"] was cancelled.");
+                        }
 		}
     }				
 }
