@@ -103,22 +103,28 @@
 			-ms-user-select: none;
 		}
 
-		.timeelapsed { 
+		.completion { 
 			position: absolute; 
 			top: 185px; 
-			left: 630px; 
+			left: 600px; 
+			color: white;
+		}
+		.timeelapsed { 
+			position: absolute; 
+			top: 230px; 
+			left: 600px; 
 			color: white;
 		}
 		.timeremaining { 
 			position: absolute; 
-			top: 230px; 
-			left: 630px; 
+			top: 275px; 
+			left: 600px; 
 			color: white;
 		}
 		.totaltime { 
 			position: absolute; 
-			top: 275px; 
-			left: 630px; 
+			top: 320px; 
+			left: 600px; 
 			color: white;
 		}
 		.jobid { 
@@ -181,13 +187,13 @@
         <script src="../angular/js/angular.min.js"></script>
 
         <script src="js/moment.min.js"></script>
-	
-	<script src="js/js.cookie.js"></script>
 		
-	<script src="js/printflow.js"></script>
-	<script src="js/printerconfig.js"></script>
+		<script src="js/printflow.js"></script>
+		<script src="js/printerconfig.js"></script>
 		
-	<link href="css/printflow.css" rel="stylesheet">
+		<script src="js/js.cookie.js"></script>
+		
+		<link href="css/printflow.css" rel="stylesheet">
     </head>
     <body style="background-color: black;" onload="init();">
 		<script>
@@ -263,6 +269,7 @@
 				}
 				progresspc = ((moment().valueOf()-starttime)/(endtime-starttime))*100;
 				document.getElementById("progress").style = "width:"+parseInt(progresspc)+"%";
+				document.getElementById("varcompletion").innerHTML = "Layer "+currentslice+" of "+totalslices+" ("+parseFloat((currentslice/totalslices)*100).toFixed(2)+"%)";
 				document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
 				if (ready){
 					if (endtime-moment().valueOf()>=0){
@@ -297,6 +304,10 @@
 				location.href="index.html";
 				});
 			}
+			
+			
+			
+			
 		</script>
         <div class="screen">
             <div class="main">
@@ -307,10 +318,12 @@
 					<area  alt="" title="Pause" shape="rect" coords="252,268,548,324" style="outline:none;" target="_self" onClick="pause();"    />
 				</map>
 				<div name="time" id="time" class="time"><script>document.write(moment().format("HH:mm:ss[<br>]DD-MMM-YY"));</script></div>
-				<img name="wifi" id="wifi" class="wifi" src="images/wifi.png">
+				<img name="wifi" id="wifi" class="wifi" src="images/wifi-0.png">
 				<div name="cancellabel" class="cancellabel" id="cancellabel" onClick="cancel();">Cancel</div>
 				<div name="pause" class="pause" id="pause" onClick="pause();">Pause</div>
 				<div name="filename" id="filename" class="filename"><script>document.write(jobname);</script></div>
+				
+				<div name="completion" id="completion" class="completion">Completion:<br><span id ="varcompletion" style="align-items: flex-end">Calculating...</span></div>
 				<div name="timeelapsed" id="timeelapsed" class="timeelapsed">Time Elapsed:<br><span id ="vartimeelapsed" style="align-items: flex-end">Calculating...</span></div>
 				<div name="timeremaining" id="timeremaining" class="timeremaining">Time Remaining:<br><span id ="vartimeremaining" style="align-items: flex-end">Calculating...</span></div>
 				<div name="jobid" id="jobid" class="jobid"><script>document.write(printid);</script></div>
