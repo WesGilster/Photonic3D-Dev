@@ -153,6 +153,9 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	chmod 777 *.sh
 	command -v dos2unix >/dev/null 2>&1 || { apt-get install --yes --force-yes dos2unix >&2; }
 	dos2unix *.sh
+	#ensure the cwhservice always is linux format and executable
+	dos2unix /etc/init.d/cwhservice
+	chmod +x /etc/init.d/cwhservice
 	chmod +x /opt/cwh/os/Linux/armv61 pdp
 	rm ${DL_FILE}
 else
