@@ -7,6 +7,8 @@ if [[ $UID != 0 ]]; then
     exit 1
 fi
 
+
+
 cpu=`uname -m`
 
 if [ -z "$HOME" ] || [ "$HOME" == "/" ]; then
@@ -43,7 +45,10 @@ else
 	installDirectory=/opt/cwh
 fi;
 
-
+#get argument as to photocentric build flavour
+if [ ! -z "$3" ]; then
+  	PHOTOCENTRIC_HARDWARE=$3
+fi
 
 #Its pretty hard to keep these updated, let me know when they get too old
 if [ "${cpu}" = "armv6l" -o "${cpu}" = "armv7l" ]; then
@@ -143,6 +148,7 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 		echo "wget of ${DL_FILE} failed. Aborting update."
 		exit 1
 	fi
+	
 
 	rm -r ${installDirectory}
 	mkdir -p ${installDirectory}
@@ -150,11 +156,30 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	mv "/tmp/${DL_FILE}" .
 
 	unzip ${DL_FILE}
+	
+	if [ -e "/etc/photocentric/printerconfig.ini" ]; then 
+		#todo: read from printerconfig.ini
+		source /etc/photocentric/printerconfig.ini
+		echo var printerName = \"$printername\"\; > /tmp/$DL_FILE/photocentric/printflow/js/printerconfig.js
+	elseif [ -z $PHOTOCENTRIC_HARDWARE ]; then
+		echo var printerName = \"$PHOTOCENTRIC_HARDWARE\"\; > /tmp/$DL_FILE/photocentric/printflow/js/printerconfig.js
+	else
+		echo "unable to determine hardware"
+		exit 1
+	fi
+	
+	if [ ! -e /etc/photocentric/printerconfig.ini ]; then
+		mkdir /etc/photocentric
+		touch /etc/photocentric/printerconfig.ini
+		echo "printername=\"$PHOTOCENTRIC_HARDWARE\"" >> /etc/photocentric/printerconfig.ini
+	fi
+
+	
 	chmod 777 *.sh
 	command -v dos2unix >/dev/null 2>&1 || { apt-get install --yes --force-yes dos2unix >&2; }
-	dos2unix *.sh
+	grep -lU $'\x0D' *.sh | xargs dos2unix
 	#ensure the cwhservice always is linux format and executable
-	dos2unix /etc/init.d/cwhservice
+	grep -lU $'\x0D' /etc/init.d/cwhservice | xargs dos2unix
 	chmod +x /etc/init.d/cwhservice
 	chmod +x /opt/cwh/os/Linux/armv61 pdp
 	rm ${DL_FILE}
