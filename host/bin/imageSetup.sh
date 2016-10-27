@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # variables (per pi)
-export newhost=LCHR
+
 # can be either 4ktouch, 4kscreen, standalone or LCHR
 export portno=9091
 # currently set to 9091. Needs to be updated if the port config changes.
@@ -24,30 +24,7 @@ echo "Getting updates and installing utilities"
 apt-get update
 apt-get -y upgrade
 apt-get -y install rpi-chromium-mods dos2unix curl librxtx-java fbi git rsync rpi-update matchbox-window-manager uzbl xinit nodm Xorg unclutter feh jq tint2 wmctrl
-
-if [ -e photonic-repo ]; then
-	rm -rf photonic-repo
-fi
-git clone https://github.com/Photocentric3D/Photonic3D.git photonic-repo
 rpi-update
-
-if [[ "[ "$newhost" == "4kscreen" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhost" == "standalone" ]" ]]
-	then
-		echo "update photonic"
-		# would prefer to call this to update to a particular version,
-		# but the auto-update in start.sh will flatten any changes we make in the next section
-		# so doing this first.
-		chmod +x photonic-repo/host/bin/*.sh
-		dos2unix photonic-repo/host/bin/*.sh
-		if [ -e "/opt/cwh/stop.sh" ]
-			then
-				# kill the old version of photonic using its stop.sh script
-				/opt/cwh/stop.sh
-		fi
-		# launch the Photocentric rather than area515 version of start.sh - ensures using Photocentric branch
-		photonic-repo/host/bin/start.sh
-fi
-dos2unix /opt/cwh/*.sh
 
 # redirect boot terminal output not to screen
 echo "removing pi branding"
@@ -63,15 +40,14 @@ else
 	echo "already complete!"
 fi
 
+
 echo "installing common files"
-rsync -avr photonic-repo/host/common/ /
-rsync -avr photonic-repo/host/resourcesnew/printflow /opt/cwh/resourcesnew/ #keep printflow without the trailing / 
-if [ -e /opt/cwh/photocentric/ ]; then
-	mkdir /opt/cwh/photocentric
+if [ -e photonic-repo ]; then
+	rm -rf photonic-repo
 fi
-rsync -avr photonic-repo/host/photocentric/printflow /opt/cwh/photocentric/
+git clone https://github.com/Photocentric3D/Photonic3D.git photonic-repo
+rsync -avr photonic-repo/host/common/ /
 cp photonic-repo/host/os/Linux/armv61/pdp /opt/cwh/os/Linux/armv61/pdp #copy display manager for screen + curing screen printers
-cp photonic-repo/host/resourcesnew/printflow/holdingpage.html /home/pi/holdingpage.html #copy holdingpage for fallback
 #install splash screen
 chown root /etc/splash.png
 chmod 777 /etc/splash.png
@@ -91,7 +67,7 @@ fi
 echo "Working on per printer settings..."
 echo \# Photocentric mods >> /boot/config.txt
 
-if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhost" == "standalone" ]" ]]; then
+if [[ "[ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "4ktouch" ]" || "[ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "LCHR" ]" || "[ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "standalone" ]" ]]; then
 	# Touchscreen pis only
 	echo "Modifying config files for touchscreen"
 	if grep -Fxq "disable_splash" /boot/config.txt
@@ -132,13 +108,12 @@ if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhos
 		echo xset s noblank >> /home/pi/.xsession
 	
 	
-		if [ $newhost == "4ktouch" ]; then
+		if [ $OCTOPI_PHOTOCENTRIC_HARDWARE == "4ktouch" ]; then
 			export target=4kscreen
 		else
-			export target=$newhost
+			export target=$OCTOPI_PHOTOCENTRIC_HARDWARE
 		fi
-
-
+		
 		echo unclutter -jitter 1 -idle 0.2 -noevents -root \& feh -NY --bg /etc/splash.png /etc/ \& exec matchbox-window-manager -use_titlebar no \& >> /home/pi/.xsession
 		echo while true\; do >> /home/pi/.xsession
 	
@@ -162,7 +137,7 @@ if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhos
 			
 fi
 
-if [ "$newhost" == "4ktouch" ]
+if [ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "4ktouch" ]
 	then
 		#4K touchscreen only
 
@@ -173,7 +148,7 @@ if [ "$newhost" == "4ktouch" ]
 		/etc/init.d/ntp restart
 fi
 
-if [ "$newhost" == "4kscreen" ]
+if [ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "4kscreen" ]
 	then
 		echo "Installing 4k support"
 		if grep -Fxq "hdmi_pixel_freq_limit" /boot/config.txt
@@ -195,7 +170,7 @@ if [ "$newhost" == "4kscreen" ]
 		echo var printerName = \"Photocentric Pro\"\; > /opt/cwh/resourcesnew/printflow/js/printerconfig.js
 fi
 
-if [ "$newhost" == "LCHR" ]
+if [ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "LCHR" ]
 	then
 		echo "setting up high resolution screen"
 		if grep -Fxq "hdmi_pixel_freq_limit" /boot/config.txt
@@ -218,7 +193,7 @@ if [ "$newhost" == "LCHR" ]
 fi
 
 
-if [ "$newhost" == "standalone" ]
+if [ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "standalone" ]
 	then
 		echo "creating standalone image..."
 		#TODO
@@ -227,14 +202,6 @@ if [ "$newhost" == "standalone" ]
 		curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d @printerprofile.json "http://localhost:$portno/services/printers/save"
 		echo var printerName = \"Photocentric 10\"\; > /opt/cwh/resourcesnew/printflow/js/printerconfig.js
 fi
-
-# Change hostname
-# left this 'til last for good reasons. Keep it last now.
-export hostn=$(cat /etc/hostname)
-echo "Existing hostname is $hostn, changing to $newhost"
-sed -i "s/$hostn/$newhost/g" /etc/hosts
-sed -i "s/$hostn/$newhost/g" /etc/hostname
-echo "Your new hostname is $newhost, accessible from $newhost.local"
 
 echo "changing password"
 echo 'pi:$newpassword' | chpasswd
@@ -245,4 +212,3 @@ rm -rf photonic-repo
 rm printerprofile.json
 
 apt-get clean
-reboot
