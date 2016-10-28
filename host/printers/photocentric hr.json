@@ -4,8 +4,8 @@
       "machineConfig": {
       "name": "LC HR",
         "FileVersion": 0,
-      "PlatformXSize": 160,
-      "PlatformYSize": 120,
+      "PlatformXSize": 197,
+      "PlatformYSize": 147,
         "PlatformZSize": 200,
         "MaxXFeedRate": 0,
         "MaxYFeedRate": 0,
@@ -32,10 +32,10 @@
           "ComPortSettings": {
             "Handshake": "None"
           },
-          "MonitorTop": 12,
-          "MonitorLeft": 11,
-          "MonitorRight": 11,
-          "MonitorBottom": 12,
+          "MonitorTop": 18,
+          "MonitorLeft": 13,
+          "MonitorRight": 13,
+          "MonitorBottom": 18,
           "UseMask": false
         },
         "PauseOnPrinterResponseRegEx": ".*door.*open.*"
