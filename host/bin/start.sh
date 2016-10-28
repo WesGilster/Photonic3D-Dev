@@ -7,8 +7,6 @@ if [[ $UID != 0 ]]; then
     exit 1
 fi
 
-
-
 cpu=`uname -m`
 
 if [ -z "$HOME" ] || [ "$HOME" == "/" ]; then
@@ -45,10 +43,13 @@ else
 	installDirectory=/opt/cwh
 fi;
 
+
 #get argument as to photocentric build flavour
 if [ ! -z "$3" ]; then
   	PHOTOCENTRIC_HARDWARE=$3
 fi
+# disable wlan0 because we don't want to use it
+ifconfig wlan0 down
 
 #Its pretty hard to keep these updated, let me know when they get too old
 if [ "${cpu}" = "armv6l" -o "${cpu}" = "armv7l" ]; then
@@ -144,19 +145,20 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	DL_FILE=${DL_URL##*/}
 	rm -f "/tmp/${DL_FILE}"
 	wget -P /tmp "${DL_URL}"
-  if [ $? -ne 0 ]; then
+	if [ $? -ne 0 ]; then
 		echo "wget of ${DL_FILE} failed. Aborting update."
 		exit 1
 	fi
-	
 
+
+	
 	rm -r ${installDirectory}
 	mkdir -p ${installDirectory}
 	cd ${installDirectory}
 	mv "/tmp/${DL_FILE}" .
 
 	unzip ${DL_FILE}
-	
+
 	if [ -e "/etc/photocentric/printerconfig.ini" ]; then 
 		#todo: read from printerconfig.ini
 		source /etc/photocentric/printerconfig.ini
@@ -174,14 +176,14 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 		echo "printername=\"$PHOTOCENTRIC_HARDWARE\"" >> /etc/photocentric/printerconfig.ini
 	fi
 
-	
 	chmod 777 *.sh
+	# grab dos2unix from the package manager if not installed
 	command -v dos2unix >/dev/null 2>&1 || { apt-get install --yes --force-yes dos2unix >&2; }
 	grep -lU $'\x0D' *.sh | xargs dos2unix
-	#ensure the cwhservice always is linux format and executable
+	# ensure the cwhservice always is linux format and executable
 	grep -lU $'\x0D' /etc/init.d/cwhservice | xargs dos2unix
 	chmod +x /etc/init.d/cwhservice
-	chmod +x /opt/cwh/os/Linux/armv61 pdp
+	chmod +x /opt/cwh/os/Linux/armv61/pdp
 	rm ${DL_FILE}
 else
 	echo No install required
@@ -213,6 +215,9 @@ fi
 if [ -e "/opt/cwh/resourcesnew/printflow/js/printerconfig.js" ]; then
 	./.focus.sh &
 fi
+
+# kill any lingering pdp sessions
+pkill -9 "pdp"
 
 if [ "$2" == "debug" ]; then
 	pkill -9 -f "org.area515.resinprinter.server.Main"

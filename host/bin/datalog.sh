@@ -1,12 +1,10 @@
 #!/bin/bash
 
-#args:
-# $1 - memory warning
-# $2 - memory error
-# $3 - temperature warning
+#args: $1 - memory warning
+# $2 - temperature warning
+# $3 - memory error
 # $4 - temperature error
 
-#check if superuser
 if [[ $UID != 0 ]]; then
     echo "Please run this script with sudo:"
     echo "sudo $0 $*"

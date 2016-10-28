@@ -64,6 +64,10 @@ else
 fi
 
 echo "installing common files"
+if [ ! -e /etc/photocentric/printerconfig.ini ]; then
+	mkdir /etc/photocentric
+	echo "printername=\"$newhost\"" >> /etc/photocentric/printerconfig.ini
+fi
 rsync -avr photonic-repo/host/common/ /
 rsync -avr photonic-repo/host/resourcesnew/printflow /opt/cwh/resourcesnew/ #keep printflow without the trailing / 
 if [ -e /opt/cwh/photocentric/ ]; then

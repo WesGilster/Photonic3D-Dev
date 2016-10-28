@@ -21,6 +21,9 @@ uint16_t* loadBitmap( char* filename, uint32_t width, uint32_t height, int* pitc
 	*pitch = roundUp( 2*width, 32 );
 	uint16_t* bitmap = (uint16_t*)malloc(*pitch*height);
 	FILE* f = fopen( filename, "rb" );
+
+	//@TODO: read the PPM header - double check that the resolution matches display - and go to error status colour if not
+
 	int fail = 1;
 	int x, y;
 	if ( f != NULL )
@@ -48,10 +51,7 @@ uint16_t* loadBitmap( char* filename, uint32_t width, uint32_t height, int* pitc
 		{
 			for ( y = 0; y < height; y++ )
 			{
-				uint16_t r = x%width < width/2 ? 0x1f : 0x0f;
-				uint16_t g = y%height < height/2 ? 0x3f : 0x1f;
-				uint16_t b = (x+y)%(width+height) < (width+height)/2 ? 0x1f : 0x0f;
-				bitmap[y*(*pitch>>1) + x] = ((r&0x1f)<<11) | ((g&0x3f)<<5) | (b&0x1f);
+				bitmap[y*(*pitch>>1) + x] = 0;
 			}
 		}
 	}
