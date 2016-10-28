@@ -47,9 +47,17 @@ fi;
 #get argument as to photocentric build flavour
 if [ ! -z "$3" ]; then
   	PHOTOCENTRIC_HARDWARE=$3
+	if [ ! $PHOTOCENTRIC_HARDWARE == "standalone" ]; then
+		PHOTOCENTRIC_HARDWARE="Photocentric 10"
+	fi	
 fi
-# disable wlan0 because we don't want to use it
-ifconfig wlan0 down
+
+if [ ! -e /etc/photocentric/printerconfig.ini ]; then
+	mkdir /etc/photocentric
+	touch /etc/photocentric/printerconfig.ini
+	echo "printername=\"$PHOTOCENTRIC_HARDWARE\"" >> /etc/photocentric/printerconfig.ini
+fi
+
 
 #Its pretty hard to keep these updated, let me know when they get too old
 if [ "${cpu}" = "armv6l" -o "${cpu}" = "armv7l" ]; then
@@ -159,23 +167,10 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 
 	unzip ${DL_FILE}
 
-	if [ -e "/etc/photocentric/printerconfig.ini" ]; then 
-		#todo: read from printerconfig.ini
-		source /etc/photocentric/printerconfig.ini
-		echo var printerName = \"$printername\"\; > /tmp/$DL_FILE/photocentric/printflow/js/printerconfig.js
-	elseif [ -z $PHOTOCENTRIC_HARDWARE ]; then
-		echo var printerName = \"$PHOTOCENTRIC_HARDWARE\"\; > /tmp/$DL_FILE/photocentric/printflow/js/printerconfig.js
-	else
-		echo "unable to determine hardware"
-		exit 1
-	fi
+	source /etc/photocentric/printerconfig.ini
+	echo var printerName = \"$printername\"\; > ./photocentric/printflow/js/printerconfig.js
+	echo var printerName = \"$printername\"\; > ./resourcesnew/printflow/js/printerconfig.js
 	
-	if [ ! -e /etc/photocentric/printerconfig.ini ]; then
-		mkdir /etc/photocentric
-		touch /etc/photocentric/printerconfig.ini
-		echo "printername=\"$PHOTOCENTRIC_HARDWARE\"" >> /etc/photocentric/printerconfig.ini
-	fi
-
 	chmod 777 *.sh
 	# grab dos2unix from the package manager if not installed
 	command -v dos2unix >/dev/null 2>&1 || { apt-get install --yes --force-yes dos2unix >&2; }
@@ -187,8 +182,12 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	rm ${DL_FILE}
 else
 	echo No install required
-
 fi
+
+if [ ! "$printername" == "Photocentric 10" ]; then
+	# disable wlan0 because we don't want to use it
+	ifconfig wlan0 down
+fi	
 
 echo Turning off screen saver and power saving
 xset s off         # don't activate screensaver
