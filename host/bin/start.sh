@@ -1,20 +1,13 @@
 #!/bin/bash
 
-#require superuser
+# require superuser
 if [[ $UID != 0 ]]; then
     echo "Please run this script with sudo:"
     echo "sudo $0 $*"
     exit 1
 fi
 
-cpu=`uname -m`
-
-if [ -z "$HOME" ] || [ "$HOME" == "/" ]; then
-  HOME=~root
-fi
-
-DEFAULT_REPO="Photocentric3D/Photonic3D"
-CONFIG_PROPS="${HOME}/3dPrinters/config.properties"
+source repoconfig.sh
 
 echo "Local Config: $CONFIG_PROPS"
 
@@ -44,12 +37,16 @@ else
 fi;
 
 
-#get argument as to photocentric build flavour
+# get argument as to photocentric build flavour
 if [ ! -z "$3" ]; then
   	PHOTOCENTRIC_HARDWARE=$3
 	if [ ! $PHOTOCENTRIC_HARDWARE == "standalone" ]; then
 		PHOTOCENTRIC_HARDWARE="Photocentric 10"
 	fi	
+	if [ ! $PHOTOCENTRIC_HARDWARE == "LCHR" ]; then
+		PHOTOCENTRIC_HARDWARE="LC HR"
+	fi	
+
 fi
 
 if [ ! -e /etc/photocentric/printerconfig.ini ]; then
