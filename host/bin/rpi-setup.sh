@@ -28,7 +28,7 @@ apt-get -y install rpi-chromium-mods dos2unix curl librxtx-java fbi git rsync rp
 if [ -e photonic-repo ]; then
 	rm -rf photonic-repo
 fi
-git clone https://github.com/Photocentric3D/Photonic3D.git photonic-repo
+git clone https://github.com/Photocentric3D/Photonic3D-Dev.git photonic-repo
 rpi-update
 
 if [[ "[ "$newhost" == "4kscreen" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhost" == "standalone" ]" ]]
