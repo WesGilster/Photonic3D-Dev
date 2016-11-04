@@ -4,6 +4,7 @@ var runningjobName="";
 var totalslices=0;
 var currentslice=0;
 var elapsedtime=0;
+var starttime=0;
 var averageslicetime=0;
 var signalstrength;
             
@@ -76,6 +77,7 @@ function printredirect(){
                                 currentslice = (data.currentSlice);
                                 elapsedtime = (data.elapsedTime);
                                 averageslicetime = (data.averageSliceTime);
+                                starttime = (data.startTime);
 			}
 			else{
 				//not printing
@@ -85,6 +87,7 @@ function printredirect(){
                                 jobID = "";
                                 elapsedtime = 0;
                                 averageslicetime = 0;
+                                starttime = 0;
 			}
 		})
                 .fail(function(){
@@ -94,6 +97,7 @@ function printredirect(){
                         jobID = "";
                         elapsedtime = 0;
                         averageslicetime = 0;
+                        starttime = 0;
                 });
              
 		if (printStatus=="Failed"){
