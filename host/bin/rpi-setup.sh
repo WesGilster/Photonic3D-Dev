@@ -132,19 +132,19 @@ if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhos
 	
 	
 		if [ $newhost == "4ktouch" ]; then
-			export target=4kscreen
+			export target=4kscreen.local
 		else
-			export target=$newhost
+			export target=localhost
 		fi
 
 
 		echo unclutter -jitter 1 -idle 0.2 -noevents -root \& feh -NY --bg /etc/splash.png /etc/ \& exec matchbox-window-manager -use_titlebar no \& >> /home/pi/.xsession
 		echo while true\; do >> /home/pi/.xsession
 	
-		echo -e "\tif curl -fI http://localhost:$portno/printflow/images/pixel.png" >> /home/pi/.xsession			
+		echo -e "\tif curl -fI http://$target:$portno/printflow/images/pixel.png" >> /home/pi/.xsession			
 		echo -e "\t\tthen" >> /home/pi/.xsession
-		echo -e "\t\t\t#uzbl -u /home/pi/holdingpage.html?target=http://localhost:$portno/printflow -c /home/pi/uzbl.conf &;" >> /home/pi/.xsession
-		echo -e "\t\t\tkweb -KJ http://localhost:$portno/printflow ;" >> /home/pi/.xsession		
+		echo -e "\t\t\t#uzbl -u /home/pi/holdingpage.html?target=http://$target:$portno/printflow -c /home/pi/uzbl.conf &;" >> /home/pi/.xsession
+		echo -e "\t\t\tkweb -KJ http://$target:$portno/printflow ;" >> /home/pi/.xsession		
 		echo -e "\tfi" >> /home/pi/.xsession
 
 		#echo exec matchbox-window-manager -use_titlebar no\; >> /home/pi/.xsession
