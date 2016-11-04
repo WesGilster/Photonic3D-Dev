@@ -109,18 +109,18 @@ if [[ "[ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "4ktouch" ]" || "[ "$OCTOPI_PHOTOCEN
 	
 	
 		if [ $OCTOPI_PHOTOCENTRIC_HARDWARE == "4ktouch" ]; then
-			export target=4kscreen
+			export target=4kscreen.local
 		else
-			export target=$OCTOPI_PHOTOCENTRIC_HARDWARE
+			export target=localhost
 		fi
 		
 		echo unclutter -jitter 1 -idle 0.2 -noevents -root \& feh -NY --bg /etc/splash.png /etc/ \& exec matchbox-window-manager -use_titlebar no \& >> /home/pi/.xsession
 		echo while true\; do >> /home/pi/.xsession
 	
-		echo -e "\tif curl -fI http://$target.local:$portno/printflow/images/pixel.png" >> /home/pi/.xsession			
+		echo -e "\tif curl -fI http://$target:$portno/printflow/images/pixel.png" >> /home/pi/.xsession			
 		echo -e "\t\tthen" >> /home/pi/.xsession
-		echo -e "\t\t\t#uzbl -u /home/pi/holdingpage.html?target=http://$target.local:$portno/printflow -c /home/pi/uzbl.conf &;" >> /home/pi/.xsession
-		echo -e "\t\t\tkweb -KJ http://$target.local:$portno/printflow ;" >> /home/pi/.xsession		
+		echo -e "\t\t\t#uzbl -u /home/pi/holdingpage.html?target=http://$target:$portno/printflow -c /home/pi/uzbl.conf &;" >> /home/pi/.xsession
+		echo -e "\t\t\tkweb -KJ http://$target:$portno/printflow ;" >> /home/pi/.xsession		
 		echo -e "\tfi" >> /home/pi/.xsession
 
 		#echo exec matchbox-window-manager -use_titlebar no\; >> /home/pi/.xsession
