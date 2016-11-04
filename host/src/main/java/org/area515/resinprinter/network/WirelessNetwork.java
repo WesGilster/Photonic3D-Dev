@@ -38,4 +38,12 @@ public class WirelessNetwork {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+		
+	public String getSignalStrength(){
+		return signalStrength;
+	}
+	
+	public void setSignalStrength(String signalStrength){
+		this.signalStrength = signalStrength;
+	}
 }
