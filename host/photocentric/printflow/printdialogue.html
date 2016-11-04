@@ -238,10 +238,6 @@
 							document.getElementById("vartimeremaining").innerHTML = "COMPLETE";
 						}
 					}
-					if (document.getElementById("pause").innerHTML=="Resume"){
-						endtime+=1000;
-						starttime+=1000;
-					}
 	
 					endtime=starttime+elapsedtime+(averageslicetime*(totalslices-currentslice));
 					initialsliceurl="../services/printJobs/currentSliceImage/"+jobId;
