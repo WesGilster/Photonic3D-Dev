@@ -53,6 +53,7 @@ if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	mkdir /etc/photocentric
 	touch /etc/photocentric/printerconfig.ini
 	echo "export printername=\"$PHOTOCENTRIC_HARDWARE\"" >> /etc/photocentric/printerconfig.ini
+	export printername=$PHOTOCENTRIC_HARDWARE
 fi
 
 
