@@ -66,7 +66,7 @@ fi
 echo "installing common files"
 if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	mkdir /etc/photocentric
-	echo "printername=\"$newhost\"" >> /etc/photocentric/printerconfig.ini
+	echo "export printername=\"$newhost\"" >> /etc/photocentric/printerconfig.ini
 fi
 rsync -avr photonic-repo/host/common/ /
 cp photonic-repo/host/os/Linux/armv61/pdp /opt/cwh/os/Linux/armv61/pdp #copy display manager for screen + curing screen printers
