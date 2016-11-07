@@ -67,7 +67,7 @@
 		-->
 	</target>
 	
-        <target name="BuildPDP" description="build pdp program">
+        <target name="BuildPDP" description="build pdp program" if="isUnix">
                 <chmod file="src/main/c/build.sh" perm="+x"/>
                 <exec executable="./src/main/c/build.sh" failonerror="true" osfamily="unix"/>
                 <chmod file="src/main/c/pdp" perm="+x"/>
