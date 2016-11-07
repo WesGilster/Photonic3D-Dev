@@ -163,10 +163,6 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	mv "/tmp/${DL_FILE}" .
 
 	unzip ${DL_FILE}
-
-	source /etc/photocentric/printerconfig.ini
-	echo var printerName = \"$printername\"\; > ./photocentric/printflow/js/printerconfig.js
-	echo var printerName = \"$printername\"\; > ./resourcesnew/printflow/js/printerconfig.js
 	
 	chmod 777 *.sh
 	# grab dos2unix from the package manager if not installed
@@ -190,6 +186,13 @@ echo Turning off screen saver and power saving
 xset s off         # don't activate screensaver
 xset -dpms         # disable DPMS (Energy Star) features
 xset s noblank     # don't blank the video device
+
+echo configuring printflow interface
+source /etc/photocentric/printerconfig.ini
+touch photocentric/printflow/js/printerconfig.js
+touch resourcesnew/printflow/js/printerconfig.js
+echo var printerName = \"$printername\"\; > photocentric/printflow/js/printerconfig.js
+echo var printerName = \"$printername\"\; > resourcesnew/printflow/js/printerconfig.js
 
 if [ ! -f "/etc/init.d/cwhservice" ]; then
 	echo Installing Photonic3D as a service
