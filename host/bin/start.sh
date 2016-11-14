@@ -213,7 +213,7 @@ if [ -f "eachStart.sh" ]; then
 fi
 
 if [ -e "/opt/cwh/resourcesnew/printflow/js/printerconfig.js" ]; then
-	./.focus.sh &
+	./focus.sh &
 fi
 
 # kill any lingering pdp sessions
