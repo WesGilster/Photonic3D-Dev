@@ -7,7 +7,7 @@ if [[ $UID != 0 ]]; then
     exit 1
 fi
 
-source repoconfig.sh
+source "$(dirname $(readlink -f $0))/repoconfig.sh"
 
 echo "Local Config: $CONFIG_PROPS"
 
