@@ -221,7 +221,7 @@
 					document.getElementById("layerslice").src="http://www.kudo3d.com/wp-content/uploads/2015/07/Pranav_Pancha_model-of-the-Eiffel-Tower.gif";
 					document.getElementById("jobid").innerHTML=jobId;
 					document.getElementById("filename").innerHTML=runningjobName;
-					document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
+					document.getElementById("vartimeelapsed").innerHTML = moment.duration(endtime-starttime).humanize();
 				});
 				startpage();
 				document.getElementById("filename").innerHTML=runningjobName;
@@ -230,18 +230,18 @@
 				setInterval(function() {
 					if (currentslice > 1) {
 						if (endtime-moment().valueOf()>=0){
-							document.getElementById("vartimeelapsed").innerHTML = moment.duration(moment().valueOf()-starttime).humanize();
 							document.getElementById("vartimeremaining").innerHTML = moment.duration(endtime-moment().valueOf()).humanize();
+							document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
 						}
 						else{
-							document.getElementById("vartimeelapsed").innerHTML = moment.duration(endtime-starttime).humanize();
 							document.getElementById("vartimeremaining").innerHTML = "COMPLETE";
+							document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
 						}
 					}
 	
 					endtime=starttime+elapsedtime+(averageslicetime*(totalslices-currentslice));
 					initialsliceurl="../services/printJobs/currentSliceImage/"+jobId;
-					
+					document.getElementById("vartimeelapsed").innerHTML = moment.duration(endtime-starttime).humanize();
 					document.getElementById("layerslice").src=initialsliceurl+"?q="+currentslice;
 					document.getElementById("progress").style = "width:"+parseInt((currentslice/totalslices)*100)+"%";
 					if ((parseFloat((currentslice/totalslices)*100).toFixed(2) != "NaN")&&(parseFloat((currentslice/totalslices)*100).toFixed(2) != "Infinity")){
