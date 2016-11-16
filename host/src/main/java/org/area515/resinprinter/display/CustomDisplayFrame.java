@@ -32,6 +32,8 @@ public class CustomDisplayFrame extends Frame {
 		Graphics2D g2 = bi.createGraphics();
 		paint( g2 );
 		dev.outputImage( bi );
+		g2.dispose();
+		bi.flush();
 	}
 
 	public Rectangle getBounds() {

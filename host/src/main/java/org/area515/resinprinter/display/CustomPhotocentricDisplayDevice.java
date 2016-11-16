@@ -52,7 +52,6 @@ public class CustomPhotocentricDisplayDevice extends GraphicsDevice {
 
 			photocentricDisplayServerProcess = pb.start(); 
 			BufferedReader br = new BufferedReader(new InputStreamReader(photocentricDisplayServerProcess.getInputStream()));
-			
 
 			String line = br.readLine();
 			photocentricDisplayServerProcess.waitFor();
@@ -61,6 +60,7 @@ public class CustomPhotocentricDisplayDevice extends GraphicsDevice {
 			width = Integer.parseInt( dims[0].trim() );
 			height = Integer.parseInt( dims[1].trim() );
             logger.debug("PDP Init: w={} h={}\n", width, height);
+			photocentricDisplayServerProcess.destroy();
         } catch ( IOException e ) {
             logger.error("Failed to spawn Photocentric display server process [IO]\n");
         } catch ( InterruptedException e) {
