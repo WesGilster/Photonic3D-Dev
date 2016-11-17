@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # variables (per pi)
-export newhost=LCHR
-# can be either 4ktouch, 4kscreen, standalone or LCHR
+export newhost="LC HR"
+# can be either 4ktouch, 4kscreen, "Photocentric 10" or "LC HR"
 export portno=9091
 # currently set to 9091. Needs to be updated if the port config changes.
 # Installers will also need to double check and update this if the port no changes between builds.
