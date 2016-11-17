@@ -178,7 +178,7 @@ else
 	echo No install required
 fi
 
-if [ ! "$printername" == "Photocentric 10" ]; then
+if [ "$printername" != "Photocentric 10" ]; then
 	# disable wlan0 because we don't want to use it
 	ifconfig wlan0 down
 fi	
