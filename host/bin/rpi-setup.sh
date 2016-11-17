@@ -244,7 +244,7 @@ sed -i "s/$hostn/$newhost/g" /etc/hostname
 echo "Your new hostname is $newhost, accessible from $newhost.local"
 
 echo "changing password"
-echo 'pi:$newpassword' | chpasswd
+echo "pi:$newpassword" | chpasswd
 echo "password updated!"
 #if you haven't already, re-read the big important note at the top!
 
