@@ -122,59 +122,80 @@
 			ssid= urlParam("SSID");
 			if (ssid=="null") ssid="";
 			startpage();
-			
+
 			function urlParam (name){
 				var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
 				return results[1] || 0;
 			}
-			
+	
 			function saveWifi(){
-					data={
-						"ssid": document.getElementById("SSID").value,
-						"supportedWirelessEncryption": [
-							{
-								"encryptionClass": "WPA",
-								"groupCipher": [
-									"CCMP"
-								],
-								"pairwiseCipher": [
-									"CCMP"
-								]
-							}
-						],
-						"parentInterfaceName": "wlan0",
-						"password": document.getElementById("pass").value,
-						};
 
-					console.log(data);
-					$.ajax({
-						method: 'PUT',
-						url: "../services/machine/wirelessConnect",
-						headers: {"Content-Type": "application/json" },
-						data: JSON.stringify(data),
-						dataType: 'json',
-						success: function(resp) {
-							document.getElementById("warn").setAttribute("color","green");
-							document.getElementById("warn").innerHTML="Settings saved!";
-							console.log(resp);
-							setTimeout(function() {
-							location.href="wifisettings.html";
-							}, 2000);
-						},
-						error: function(xhr, status, error) {
-							console.log(status + ":" + error);
-							$('#warning').show();
-							document.getElementById("bigbuttonhighlight").style.setProperty("filter","hue-rotate(180deg)");
-							document.getElementById("bigbuttonhighlight").style.setProperty("-webkit-filter","hue-rotate(180deg)");
-							setTimeout(function() {
-							$('#warning').hide();
-							document.getElementById("bigbuttonhighlight").style.setProperty("filter","hue-rotate(0deg)");
-							document.getElementById("bigbuttonhighlight").style.setProperty("-webkit-filter","hue-rotate(0deg)");
-							}, 5000);
+				searchSSID = document.getElementById("SSID").value;
+				supportedcrypt = null;
+				parentinterface = null;
+				found = false;
+
+				$.getJSON('../services/machine/wirelessNetworks/list')
+				.done(function(data){
+					$.each(data, function (key, val) {
+						if (val.ssid==searchSSID){
+							supportedcrypt= val.supportedWirelessEncryption;
+							parentinterface = val.parentInterfaceName;
+							found = true;
 						}
 					});
-					
+					if (found){
+						data={
+							"ssid": searchSSID,
+							"supportedWirelessEncryption": supportedcrypt,
+							"parentInterfaceName": parentinterface,
+							"password": document.getElementById("pass").value,
+						};
+		
+						console.log(data);
+						$.ajax({
+							method: 'PUT',
+							url: "../services/machine/wirelessConnect",
+							headers: {"Content-Type": "application/json" },
+							data: JSON.stringify(data),
+							dataType: 'json',
+							success: function(resp) {
+								document.getElementById("warn").setAttribute("color","green");
+								document.getElementById("warn").innerHTML="Settings saved!";
+								console.log(resp);
+								setTimeout(function() {
+									location.href="wifisettings.html";
+								}, 2000);
+							},	
+							error: function(xhr, status, error) {
+								console.log(status + ":" + error);
+								$('#warning').show();
+								document.getElementById("bigbuttonhighlight").style.setProperty("filter","hue-rotate(180deg)");
+								document.getElementById("bigbuttonhighlight").style.setProperty("-webkit-filter","hue-rotate(180deg)");
+								setTimeout(function() {
+									$('#warning').hide();
+									document.getElementById("bigbuttonhighlight").style.setProperty("filter","hue-rotate(0deg)");
+									document.getElementById("bigbuttonhighlight").style.setProperty("-webkit-filter","hue-rotate(0deg)");
+								}, 5000);
+							}
+						});
+					}
+					else{
+						window.location.href=("error.html?errorname=Saving WiFi connection failed&errordetails=Saving wifi connection "+searchSSID+" failed.&errordetails2=The printer was unable to find the wireless access point. Settings have not been changed.");
+					}
+				})
+				.fail(function(){
+					console.log(status + ":" + error);
+					$('#warning').show();
+					document.getElementById("bigbuttonhighlight").style.setProperty("filter","hue-rotate(180deg)");
+					document.getElementById("bigbuttonhighlight").style.setProperty("-webkit-filter","hue-rotate(180deg)");
+					setTimeout(function() {
+						$('#warning').hide();
+						document.getElementById("bigbuttonhighlight").style.setProperty("filter","hue-rotate(0deg)");
+						document.getElementById("bigbuttonhighlight").style.setProperty("-webkit-filter","hue-rotate(0deg)");
+					}, 5000);
 
+				});
 			}
 		</script>
         <div class="screen">
