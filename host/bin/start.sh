@@ -178,10 +178,7 @@ else
 	echo No install required
 fi
 
-if [ "$printername" != "Photocentric 10" ]; then
-	# disable wlan0 because we don't want to use it
-	ifconfig wlan0 down
-fi	
+
 
 echo Turning off screen saver and power saving
 xset s off         # don't activate screensaver
@@ -194,6 +191,11 @@ touch photocentric/printflow/js/printerconfig.js
 touch resourcesnew/printflow/js/printerconfig.js
 echo var printerName = \"$printername\"\; > photocentric/printflow/js/printerconfig.js
 echo var printerName = \"$printername\"\; > resourcesnew/printflow/js/printerconfig.js
+
+if [ "$printername" != "Photocentric 10" ]; then
+	# disable wlan0 because we don't want to use it
+	ifconfig wlan0 down
+fi	
 
 if [ ! -f "/etc/init.d/cwhservice" ]; then
 	echo Installing Photonic3D as a service
