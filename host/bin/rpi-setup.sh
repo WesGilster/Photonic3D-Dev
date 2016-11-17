@@ -31,6 +31,15 @@ fi
 git clone https://github.com/Photocentric3D/Photonic3D-Dev.git photonic-repo
 rpi-update
 
+echo "setting up printer config file"
+if [ ! -e /etc/photocentric/printerconfig.ini ]; then
+	mkdir /etc/photocentric
+	echo "export printername=\"$newhost\"" >> /etc/photocentric/printerconfig.ini
+	echo "...done"
+	else
+	echo "Printer update file already exists!?"
+fi
+
 if [[ "[ "$newhost" == "4kscreen" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhost" == "standalone" ]" ]]
 	then
 		echo "update photonic"
@@ -64,10 +73,6 @@ else
 fi
 
 echo "installing common files"
-if [ ! -e /etc/photocentric/printerconfig.ini ]; then
-	mkdir /etc/photocentric
-	echo "export printername=\"$newhost\"" >> /etc/photocentric/printerconfig.ini
-fi
 rsync -avr photonic-repo/host/common/ /
 cp photonic-repo/host/os/Linux/armv61/pdp /opt/cwh/os/Linux/armv61/pdp #copy display manager for screen + curing screen printers
 cp photonic-repo/host/resourcesnew/printflow/holdingpage.html /home/pi/holdingpage.html #copy holdingpage for fallback
