@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # variables (per pi)
-export newhost="LC HR"
+export build="LC HR"
 # can be either 4ktouch, 4kscreen, "Photocentric 10" or "LC HR"
 export portno=9091
 # currently set to 9091. Needs to be updated if the port config changes.
@@ -34,13 +34,13 @@ rpi-update
 echo "setting up printer config file"
 if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	mkdir /etc/photocentric
-	echo "export printername=\"$newhost\"" >> /etc/photocentric/printerconfig.ini
+	echo "export printername=\"$build\"" >> /etc/photocentric/printerconfig.ini
 	echo "...done"
 	else
 	echo "Printer update file already exists!?"
 fi
 
-if [[ "[ "$newhost" == "4kscreen" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhost" == "standalone" ]" ]]
+if [[ "[ "$build" == "4kscreen" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]
 	then
 		echo "update photonic"
 		# would prefer to call this to update to a particular version,
@@ -95,7 +95,7 @@ fi
 echo "Working on per printer settings..."
 echo \# Photocentric mods >> /boot/config.txt
 
-if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhost" == "standalone" ]" ]]; then
+if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]; then
 	# Touchscreen pis only
 	echo "Modifying config files for touchscreen"
 	if grep -Fxq "disable_splash" /boot/config.txt
@@ -136,7 +136,7 @@ if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhos
 		echo xset s noblank >> /home/pi/.xsession
 	
 	
-		if [ $newhost == "4ktouch" ]; then
+		if [ $build == "4ktouch" ]; then
 			export target=4kscreen.local
 		else
 			export target=localhost
@@ -166,10 +166,10 @@ if [[ "[ "$newhost" == "4ktouch" ]" || "[ "$newhost" == "LCHR" ]" || "[ "$newhos
 			
 fi
 
-if [ "$newhost" == "4ktouch" ]
+if [ "$build" == "4ktouch" ]
 	then
 		#4K touchscreen only
-
+		newhost="4ktouch"
 		#enabling NTP listening 
 		echo setting up network time client
 		sed -i "s/\#disable/disable/g" /etc/ntp.conf
@@ -177,8 +177,9 @@ if [ "$newhost" == "4ktouch" ]
 		/etc/init.d/ntp restart
 fi
 
-if [ "$newhost" == "4kscreen" ]
+if [ "$build" == "4kscreen" ]
 	then
+		newhost="4kscreen"
 		echo "Installing 4k support"
 		if grep -Fxq "hdmi_pixel_freq_limit" /boot/config.txt
 			then
@@ -199,8 +200,9 @@ if [ "$newhost" == "4kscreen" ]
 		echo var printerName = \"Photocentric Pro\"\; > /opt/cwh/resourcesnew/printflow/js/printerconfig.js
 fi
 
-if [ "$newhost" == "LCHR" ]
+if [ "$build" == "LC HR" ]
 	then
+		newhost="lchr"
 		echo "setting up high resolution screen"
 		if grep -Fxq "hdmi_pixel_freq_limit" /boot/config.txt
 			then
@@ -222,8 +224,9 @@ if [ "$newhost" == "LCHR" ]
 fi
 
 
-if [ "$newhost" == "standalone" ]
+if [ "$build" == "Photocentric 10" ]
 	then
+		newhost="standalone"
 		echo "creating standalone image..."
 		#TODO
 		echo "installing Photocentric 10 profile"
