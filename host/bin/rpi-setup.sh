@@ -103,7 +103,6 @@ if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" ==
 		echo "already done!"
 	else
 		echo disable_splash=1 >> /boot/config.txt
-		echo lcd_rotate=2 >> /boot/config.txt
 		echo avoid_warnings=1 >> /boot/config.txt
 	fi
 	echo "installing kiosk browser"
