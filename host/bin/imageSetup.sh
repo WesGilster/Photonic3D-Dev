@@ -75,7 +75,6 @@ if [[ "[ "$OCTOPI_PHOTOCENTRIC_HARDWARE" == "4ktouch" ]" || "[ "$OCTOPI_PHOTOCEN
 		echo "already done!"
 	else
 		echo disable_splash=1 >> /boot/config.txt
-		echo lcd_rotate=2 >> /boot/config.txt
 		echo avoid_warnings=1 >> /boot/config.txt
 	fi
 	echo "installing kiosk browser"
