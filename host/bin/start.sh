@@ -190,7 +190,10 @@ source /etc/photocentric/printerconfig.ini
 touch photocentric/printflow/js/printerconfig.js
 touch resourcesnew/printflow/js/printerconfig.js
 echo var printerName = \"$printername\"\; > photocentric/printflow/js/printerconfig.js
+echo var repo = \"$repo\"\; >> photocentric/printflow/js/printerconfig.js
 echo var printerName = \"$printername\"\; > resourcesnew/printflow/js/printerconfig.js
+echo var repo = \"$repo\"\; >> resourcesnew/printflow/js/printerconfig.js
+
 
 if [ "$printername" != "Photocentric 10" ]; then
 	# disable wlan0 because we don't want to use it
