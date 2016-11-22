@@ -10,6 +10,7 @@ export newpassword=photocentric
 # *** IMPORTANT NOTE *** declaring this as a variable in an open source project is totally insecure!
 # Ideally the password should be changed offline, and this repo should never be updated to match that.
 # but it's still better than sending out the hardware with the default pi user and password unchanged. Obviously.
+export repo="Photocentric3D/Photonic3D-Dev"
 
 #require SU
 if [[ $UID != 0 ]]; then
@@ -28,7 +29,7 @@ apt-get -y install rpi-chromium-mods dos2unix curl librxtx-java fbi git rsync rp
 if [ -e photonic-repo ]; then
 	rm -rf photonic-repo
 fi
-git clone https://github.com/Photocentric3D/Photonic3D-Dev.git photonic-repo
+git clone https://github.com/${repo}.git photonic-repo
 rpi-update
 
 echo "setting up printer config file"
@@ -145,10 +146,10 @@ if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" ==
 		echo unclutter -jitter 1 -idle 0.2 -noevents -root \& feh -NY --bg /etc/splash.png /etc/ \& exec matchbox-window-manager -use_titlebar no \& >> /home/pi/.xsession
 		echo while true\; do >> /home/pi/.xsession
 	
-		echo -e "\tif curl -fI http://$target:$portno/printflow/images/pixel.png" >> /home/pi/.xsession			
+		echo -e "\tif curl -fI http://${target}:${portno}/printflow/images/pixel.png" >> /home/pi/.xsession			
 		echo -e "\t\tthen" >> /home/pi/.xsession
-		echo -e "\t\t\t#uzbl -u /home/pi/holdingpage.html?target=http://$target:$portno/printflow -c /home/pi/uzbl.conf &;" >> /home/pi/.xsession
-		echo -e "\t\t\tkweb -KJ http://$target:$portno/printflow ;" >> /home/pi/.xsession		
+		echo -e "\t\t\t#uzbl -u /home/pi/holdingpage.html?target=http://${target}:${portno}/printflow -c /home/pi/uzbl.conf &;" >> /home/pi/.xsession
+		echo -e "\t\t\tkweb -KJ http://${target}:${portno}/printflow ;" >> /home/pi/.xsession		
 		echo -e "\tfi" >> /home/pi/.xsession
 
 		#echo exec matchbox-window-manager -use_titlebar no\; >> /home/pi/.xsession
@@ -194,7 +195,7 @@ if [ "$build" == "4kscreen" ]
 		
 		#TODO - add network time propogation to support 4ktouch. Currently built into WG images, but not setup by shell script yet
 		echo "setting up Photocentric Pro profile"
-		wget https://raw.githubusercontent.com/Photocentric3D/Photonic3D/master/host/printers/Photocentric%20Pro.json -O printerprofile.json
+		wget https://raw.githubusercontent.com/${repo}/master/host/printers/Photocentric%20Pro.json -O printerprofile.json
 		curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d @printerprofile.json 'http://localhost:$portno/services/printers/save'
 		echo var printerName = \"Photocentric Pro\"\; > /opt/cwh/resourcesnew/printflow/js/printerconfig.js
 fi
@@ -217,7 +218,7 @@ if [ "$build" == "LC HR" ]
 
 
 		echo "installing Photocentric Liquid Crystal HR profile"
-		wget https://raw.githubusercontent.com/Photocentric3D/Photonic3D/master/host/printers/photocentric%20hr.json -O printerprofile.json
+		wget https://raw.githubusercontent.com/${repo}/master/host/printers/photocentric%20hr.json -O printerprofile.json
 		curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d @printerprofile.json 'http://localhost:$portno/services/printers/save'
 		echo var printerName = \"LC HR\"\; > /opt/cwh/resourcesnew/printflow/js/printerconfig.js
 fi
@@ -229,7 +230,7 @@ if [ "$build" == "Photocentric 10" ]
 		echo "creating standalone image..."
 		#TODO
 		echo "installing Photocentric 10 profile"
-		wget https://raw.githubusercontent.com/Photocentric3D/Photonic3D/master/host/printers/photocentric%2010.json -O printerprofile.json
+		wget https://raw.githubusercontent.com/${repo}/master/host/printers/photocentric%2010.json -O printerprofile.json
 		curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d @printerprofile.json "http://localhost:$portno/services/printers/save"
 		echo var printerName = \"Photocentric 10\"\; > /opt/cwh/resourcesnew/printflow/js/printerconfig.js
 fi
@@ -238,12 +239,12 @@ fi
 # left this 'til last for good reasons. Keep it last now.
 export hostn=$(cat /etc/hostname)
 echo "Existing hostname is $hostn, changing to $newhost"
-sed -i "s/$hostn/$newhost/g" /etc/hosts
-sed -i "s/$hostn/$newhost/g" /etc/hostname
+sed -i "s/${hostn}/${newhost}/g" /etc/hosts
+sed -i "s/${hostn}/${newhost}/g" /etc/hostname
 echo "Your new hostname is $newhost, accessible from $newhost.local"
 
 echo "changing password"
-echo "pi:$newpassword" | chpasswd
+echo "pi:${newpassword}" | chpasswd
 echo "password updated!"
 #if you haven't already, re-read the big important note at the top!
 
@@ -251,7 +252,7 @@ rm -rf photonic-repo
 rm printerprofile.json
 
 # make auto USB mount to work
-sudo udevadm control --reload-rules
+udevadm control --reload-rules
 
 apt-get clean
 reboot
