@@ -42,23 +42,27 @@
 		
 		<link href="css/printflow.css" rel="stylesheet">
     </head>
-    <body style="background-color: black;" onload="startpage();">
+    <body style="background-color: black;" onload="init();">
 		<script>
-			var softwareRevision=0;
-			$.getJSON('../services/settings/releaseTagName').done(function (data){
-						softwareRevision=data;
-						document.getElementById("swrev").innerHTML="Current Printer Software:<br/>"+String(softwareRevision);
-					});
-			if (typeof printerHardwareRev === 'undefined') {
-				printerHardwareRev = "Version 1";
-				// assume it's version 1 unless set otherwise
+			function init(){
+				startpage();
+				var softwareRevision=0;
+				$.getJSON('../services/settings/releaseTagName').done(function (data){
+							softwareRevision=data;
+							document.getElementById("swrev").innerHTML="Current Printer Software:<br/>"+String(softwareRevision);
+						});
+				if (typeof printerHardwareRev === 'undefined') {
+					printerHardwareRev = "Version 1";
+					// assume it's version 1 unless set otherwise
+				}
+				
+				if (typeof printerSerialNo === 'undefined') {
+					printerSerialNo = "unset";
+					// state it's unset unless it's set.
+				}
+				document.getElementById("serialno").innerHTML="Serial Number:<br />"+String(printerSerialNo);
+				document.getElementById("hwrev").innerHTML="Hardware Revision:<br />"+String(printerHardwareRev);
 			}
-			document.getElementById("hwrev").innerHTML="Hardware Revision:<br />"+String(printerHardwareRev);
-			if (typeof printerSerialNo === 'undefined') {
-				printerSerialNo = "unset";
-				// state it's unset unless it's set.
-			}
-			document.getElementById("serialno").innerHTML="Serial Number:<br />"+String(printerSerialNo);
 		</script>
         <div class="screen">
             <div class="main">
