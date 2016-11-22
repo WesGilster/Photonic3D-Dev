@@ -67,7 +67,11 @@
 			var log="";
 			$.getJSON('../services/settings/releaseTagName').done(function (data){
 						var currentsoftwarerevision=data;
-						$.getJSON('https://api.github.com/repos/Photocentric3D/Photonic3D/releases/latest').done(function (remotedata){
+						if (typeof repo === 'undefined'){
+							repo = "Photocentric3D/Photonic3D";
+							//override to master repo if repo hasn't been populated by printerconfig.js
+						}
+						$.getJSON('https://api.github.com/repos/'+repo+'/releases/latest').done(function (remotedata){
 							var remotesoftwarerevision=remotedata.tag_name;
 							log="Current Printer software version:\n&nbsp;&nbsp;&nbsp;&nbsp;"+currentsoftwarerevision+"\n";
 							log+="Server software version:\n&nbsp;&nbsp;&nbsp;&nbsp;"+remotesoftwarerevision+"\n\n";
@@ -76,7 +80,6 @@
 							if ((parseFloat(localFloat)) < (parseFloat(remoteFloat))){
 								log+="Your printer software needs an update. Restart the printer, and we will automatically update the printer";
 								window.location.href=("error.html?type=info&errorname=Printer Software Update Available&errordetails=There is a new software update available. Please restart your printer when it is convenient to do so, and we will install it automatically");
-
 							}
 							else {
 								log+="Your printer software is up-to-date!";
