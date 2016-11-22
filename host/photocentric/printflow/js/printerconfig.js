@@ -1,1 +1,1 @@
-var printerName = "LC HR";
+var printerName = "Photocentric 10";
