@@ -44,21 +44,11 @@
     </head>
     <body style="background-color: black;" onload="startpage();">
 		<script>
-			var softwareRevision=0;
+			softwarerevision=0;
 			$.getJSON('../services/settings/releaseTagName').done(function (data){
-						softwareRevision=data;
-						document.getElementById("swrev").innerHTML="Current Printer Software:<br/>"+String(softwareRevision);
+						softwarerevision=data;
+						document.getElementById("swrev").innerHTML="Current Printer Software:<br/>"+String(softwarerevision);
 					});
-			if (typeof printerHardwareRev === 'undefined') {
-				printerHardwareRev = "Version 1";
-				// assume it's version 1 unless set otherwise
-			}
-			document.getElementById("hwrev").innerHTML="Hardware Revision:<br />"+String(printerHardwareRev);
-			if (typeof printerSerialNo === 'undefined') {
-				printerSerialNo = "unset";
-				// state it's unset unless it's set.
-			}
-			document.getElementById("serialno").innerHTML="Serial Number:<br />"+String(printerSerialNo);
 		</script>
         <div class="screen">
             <div class="main">
@@ -73,10 +63,10 @@
 				</map>
 				<div name="time" id="time" class="time"><script>document.write(moment().format("HH:mm:ss[<br>]DD-MMM-YY"));</script></div>
 				<div name="info" id="info" class="info">
-					<div name="hwrev" id="hwrev" class="hwrev">Hardware Revision:<br /><i>Fetching...</i></div>
+					<div name="hwrev" id="hwrev" class="hwrev">Hardware Revision:<br>Alpha</div>
 					<div name="swrev" id="swrev" class="swrev"></div>
-					<!--<div name="printtimeelapsed" id="printtimeelapsed" class="printtimeelapsed">Total Time Printing:<br><script>document.write(moment().format("h:mm:ss"));</script></div> -->
-					<div name="serialno" id="serialno" class="serialno">Serial Number:<br /><i>Fetching...</i></div>
+					<div name="printtimeelapsed" id="printtimeelapsed" class="printtimeelapsed">Total Time Printing:<br><script>document.write(moment().format("h:mm:ss"));</script></div>
+					<div name="serialno" id="serialno" class="serialno">Serial Number:<br>Alpha</div>
 				</div>
 				<img name="wifi" id="wifi" class="wifi" src="images/wifi-0.png">
 				

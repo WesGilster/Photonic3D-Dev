@@ -119,12 +119,18 @@
     <body style="background-color: black;" onload="document.getElementById('SSID').value=ssid;">
 		<script>
 
-			ssid= decodeURIComponent(urlParam("SSID"));
+			ssid= urlParam("SSID");
 			if (ssid=="null") ssid="";
 			startpage();
+
+			function urlParam (name){
+				var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+				return results[1] || 0;
+			}
 	
 			function saveWifi(){
 
+				searchSSID = document.getElementById("SSID").value;
 				supportedcrypt = null;
 				parentinterface = null;
 				found = false;
@@ -132,7 +138,7 @@
 				$.getJSON('../services/machine/wirelessNetworks/list')
 				.done(function(data){
 					$.each(data, function (key, val) {
-						if (val.ssid==ssid){
+						if (val.ssid==searchSSID){
 							supportedcrypt= val.supportedWirelessEncryption;
 							parentinterface = val.parentInterfaceName;
 							found = true;
@@ -175,7 +181,7 @@
 						});
 					}
 					else{
-						window.location.href=("error.html?errorname=Saving WiFi connection failed&errordetails=Saving wifi connection "+ssid+" failed.&errordetails2=The printer was unable to find the wireless access point "+ssid+". Your settings have not been changed.");
+						window.location.href=("error.html?errorname=Saving WiFi connection failed&errordetails=Saving wifi connection "+searchSSID+" failed.&errordetails2=The printer was unable to find the wireless access point. Settings have not been changed.");
 					}
 				})
 				.fail(function(){
@@ -205,7 +211,7 @@
 				</map>
 				<div name="time" id="time" class="time"><script>document.write(moment().format("HH:mm:ss[<br>]DD-MMM-YY"));</script></div>
 				<img name="wifi" id="wifi" class="wifi" src="images/wifi-0.png">
-				<img name="wifisettings" id="wifisettings" class="wifisettings" src="images/wifi-3.png" onClick="location.href='wifisettings.html';">
+				<img name="wifisettings" id="wifisettings" class="wifisettings" src="images/wifi.png" onClick="location.href='wifisettings.html';">
 				<div name="SSIDlabel" class="SSIDlabel" id="SSIDlabel">SSID:</div>
 				<input name="SSID" class="SSID" id="SSID" value=""></input>
 				<div name="passlabel" class="passlabel" id="passlabel">Password:</div>
