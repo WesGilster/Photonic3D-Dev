@@ -118,8 +118,7 @@
     </head>
     <body style="background-color: black;" onload="document.getElementById('SSID').value=ssid;">
 		<script>
-
-			ssid= decodeURIComponent(urlParam("SSID"));
+			ssid = decodeURIComponent(urlParam("SSID"));
 			if (ssid=="null") ssid="";
 			startpage();
 	
@@ -132,7 +131,7 @@
 				$.getJSON('../services/machine/wirelessNetworks/list')
 				.done(function(data){
 					$.each(data, function (key, val) {
-						if (val.ssid==ssid){
+						if (val.ssid==document.getElementById("SSID").value){
 							supportedcrypt= val.supportedWirelessEncryption;
 							parentinterface = val.parentInterfaceName;
 							found = true;
@@ -140,7 +139,7 @@
 					});
 					if (found){
 						data={
-							"ssid": ssid,
+							"ssid": document.getElementById("SSID").value,
 							"supportedWirelessEncryption": supportedcrypt,
 							"parentInterfaceName": parentinterface,
 							"password": document.getElementById("pass").value,
@@ -175,7 +174,7 @@
 						});
 					}
 					else{
-						window.location.href=("error.html?errorname=Saving WiFi connection failed&errordetails=Saving wifi connection "+ssid+" failed.&errordetails2=The printer was unable to find the wireless access point "+ssid+". Your settings have not been changed.");
+						window.location.href=("error.html?errorname=Saving WiFi connection failed&errordetails=Saving wifi connection "+document.getElementById("SSID").value+" failed.&errordetails2=The printer was unable to find the wireless access point "+document.getElementById("SSID").value+". Your settings have not been changed.");
 					}
 				})
 				.fail(function(){
