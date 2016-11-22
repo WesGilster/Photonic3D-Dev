@@ -36,6 +36,7 @@ echo "setting up printer config file"
 if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	mkdir /etc/photocentric
 	echo "export printername=\"$build\"" >> /etc/photocentric/printerconfig.ini
+	echo "export repo=\"$repo\"" >> /etc/photocentric/printerconfig.ini
 	echo "...done"
 	else
 	echo "Printer update file already exists!?"
