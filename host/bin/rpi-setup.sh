@@ -42,7 +42,7 @@ if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	echo "Printer update file already exists!?"
 fi
 
-if [[ "[ $build == "4kscreen" ]" || "[ $build == "LC HR" ]" || "[ $build == "Photocentric 10" ]" ]]
+if  [ "$build" == "4kscreen" ] || [ "$build" == "LC HR" ]" || [ "$build" == "Photocentric 10" ];
 	then
 		echo "update photonic"
 		# would prefer to call this to update to a particular version,
