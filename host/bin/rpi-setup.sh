@@ -42,8 +42,7 @@ if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	echo "Printer update file already exists!?"
 fi
 
-if  [ "$build" == "4kscreen" ] || [ "$build" == "LC HR" ]" || [ "$build" == "Photocentric 10" ];
-	then
+if [ "$build" != "4ktouch" ] then
 		echo "update photonic"
 		# would prefer to call this to update to a particular version,
 		# but the auto-update in start.sh will flatten any changes we make in the next section
@@ -57,15 +56,16 @@ if  [ "$build" == "4kscreen" ] || [ "$build" == "LC HR" ]" || [ "$build" == "Pho
 		fi
 		# launch the Photocentric rather than area515 version of start.sh - ensures using Photocentric branch
 		photonic-repo/host/bin/start.sh
+		dos2unix /opt/cwh/*.sh
 fi
-dos2unix /opt/cwh/*.sh
+
 
 # redirect boot terminal output not to screen
 echo "removing pi branding"
 # ensure the pi always boots to console
 raspi-config nonint do_boot_behaviour B2
 # we can't remove everything as some is baked into the pi's firmware, but this gives a realistic amount.
-[ ! -e "/boot/cmdline.old" ]; then
+if [ ! -e "/boot/cmdline.old" ]; then
 	mv /boot/cmdline.txt /boot/cmdline.old 
 	echo -n "loglevel=3 logo.nologo " > /boot/cmdline.txt
 	cat /boot/cmdline.old >> /boot/cmdline.txt 
@@ -97,7 +97,7 @@ fi
 echo "Working on per printer settings..."
 echo \# Photocentric mods >> /boot/config.txt
 
-if  [ "$build" == "4ktouch" ] || [ "$build" == "LC HR" ] || [ "$build" == "Photocentric 10" ]; then
+if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]; then
 	# Touchscreen pis only
 	echo "Modifying config files for touchscreen"
 	if grep -Fxq "disable_splash" /boot/config.txt
