@@ -97,7 +97,7 @@ fi
 echo "Working on per printer settings..."
 echo \# Photocentric mods >> /boot/config.txt
 
-if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]; then
+if [ "$build" != "4kscreen" ]; then
 	# Touchscreen pis only
 	echo "Modifying config files for touchscreen"
 	if grep -Fxq "disable_splash" /boot/config.txt
