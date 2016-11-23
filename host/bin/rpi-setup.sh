@@ -65,7 +65,7 @@ echo "removing pi branding"
 # ensure the pi always boots to console
 raspi-config nonint do_boot_behaviour B2
 # we can't remove everything as some is baked into the pi's firmware, but this gives a realistic amount.
-if [ ! -e "/boot/cmdline.old" ]; then
+[ ! -e "/boot/cmdline.old" ]; then
 	mv /boot/cmdline.txt /boot/cmdline.old 
 	echo -n "loglevel=3 logo.nologo " > /boot/cmdline.txt
 	cat /boot/cmdline.old >> /boot/cmdline.txt 
@@ -97,7 +97,7 @@ fi
 echo "Working on per printer settings..."
 echo \# Photocentric mods >> /boot/config.txt
 
-if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]; then
+if  [ "$build" == "4ktouch" ] || [ "$build" == "LC HR" ] || [ "$build" == "Photocentric 10" ]; then
 	# Touchscreen pis only
 	echo "Modifying config files for touchscreen"
 	if grep -Fxq "disable_splash" /boot/config.txt
