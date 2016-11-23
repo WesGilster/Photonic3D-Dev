@@ -42,8 +42,8 @@ if [ ! -e /etc/photocentric/printerconfig.ini ]; then
 	echo "Printer update file already exists!?"
 fi
 
-if [[ "[ "$build" == "4kscreen" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]
-	then
+
+if [ "$build" != "4ktouch" ]; then
 		echo "update photonic"
 		# would prefer to call this to update to a particular version,
 		# but the auto-update in start.sh will flatten any changes we make in the next section
@@ -57,8 +57,9 @@ if [[ "[ "$build" == "4kscreen" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" =
 		fi
 		# launch the Photocentric rather than area515 version of start.sh - ensures using Photocentric branch
 		photonic-repo/host/bin/start.sh
+		dos2unix /opt/cwh/*.sh
 fi
-dos2unix /opt/cwh/*.sh
+
 
 # redirect boot terminal output not to screen
 echo "removing pi branding"
@@ -97,7 +98,7 @@ fi
 echo "Working on per printer settings..."
 echo \# Photocentric mods >> /boot/config.txt
 
-if [[ "[ "$build" == "4ktouch" ]" || "[ "$build" == "LC HR" ]" || "[ "$build" == "Photocentric 10" ]" ]]; then
+if [ "$build" != "4kscreen" ]; then
 	# Touchscreen pis only
 	echo "Modifying config files for touchscreen"
 	if grep -Fxq "disable_splash" /boot/config.txt
