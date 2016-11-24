@@ -42,7 +42,9 @@
 	<!-- CSS for your skin goes here 
 		<link href="./creative/css/creative.css" rel="stylesheet">-->
 	
-	<script>var isDesktop = true;</script>
+	<script>
+	var isDesktop = true;
+</script>
 	
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -130,7 +132,7 @@
             </a>
           </li>
           <li ng-class="{active:index.currentPage == 'printersPage'}">
-            <a href="printersPage" ng-click="index.currentPage = 'printersPage'" ng-show='visibleCards.indexOf("printers") > -1'  style="padding-bottom: 8px; padding-top: 8px;">
+            <a href="printerControlsPage" ng-click="index.currentPage = 'printersPage'" ng-show='visibleCards.indexOf("printers") > -1'  style="padding-bottom: 8px; padding-top: 8px;">
               <img src="/images/iconPRINTER_for_menu.png" alt="Controls" height="35" width="20"> Controls
             </a>          
           </li>
@@ -170,7 +172,7 @@
         </a>          
       </li>
       <li ng-class="{active:index.currentPage == 'printersPage'}">
-        <a href="./printersPage" ng-click="index.currentPage = 'printersPage'" >
+        <a href="./printerControlsPage" ng-click="index.currentPage = 'printersPage'" >
           <i class="fa fa-lg fa-print"></i>
           Controls
         </a>          
