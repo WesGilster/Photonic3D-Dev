@@ -108,7 +108,7 @@ fi
 export DISPLAY=:0.0
 xinitProcess=`ps -ef | grep grep -v | grep xinit`
 if [ -z "${xinitProcess}" ]; then
-    echo No X server running, starting and configuring one
+    echo "["$(timestamp)"]  No X server running, starting and configuring one"
     startx &
     xhost +x
 fi
@@ -279,21 +279,22 @@ pkill -9 "pdp"
 
 #log.scrout
 echo "["$(timestamp)"] Launching Photonic"
-#log.screrr
-echo "["$(timestamp)"] INFO: Launching Photonic" >&2
 
 if [ "$2" == "debug" ]; then
 	pkill -9 -f "org.area515.resinprinter.server.Main"
-	echo "Starting printer host server($2)"
+	echo "["$(timestamp)"] Starting debug printer host server($2)"
+	echo "["$(timestamp)"] INFO: Launching Photonic debug" >&2
 	java -Xmx256m -Xms256m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n -Dlog4j.configurationFile=debuglog4j2.properties -Djava.library.path=/usr/lib/jni:os/Linux/${cpu} -cp lib/*:. org.area515.resinprinter.server.Main > log.out 2> log.err &
 	./datalog.sh &
 elif [ "$2" == "TestKit" ]; then
 	pkill -9 -f "org.area515.resinprinter.test.HardwareCompatibilityTestSuite"
-	echo Starting test kit
+	echo "["$(timestamp)"]  Starting test kit"
+	echo "["$(timestamp)"] INFO: Launching Photonic test kit" >&2
 	java -Xmx256m -Xms256m -Dlog4j.configurationFile=testlog4j2.properties -Djava.library.path=/usr/lib/jni:os/Linux/${cpu} -cp lib/*:. org.junit.runner.JUnitCore org.area515.resinprinter.test.HardwareCompatibilityTestSuite &
 else
 	pkill -9 -f "org.area515.resinprinter.server.Main"
-	echo Starting printer host server
+	echo "["$(timestamp)"] Starting printer host server"
+	echo "["$(timestamp)"] INFO: Launching Photonic release" >&2
 	java -Xmx256m -Xms256m -Dlog4j.configurationFile=log4j2.properties -Djava.library.path=/usr/lib/jni:os/Linux/${cpu} -cp lib/*:. org.area515.resinprinter.server.Main > log.out 2> log.err &
 fi
 echo "["$(timestamp)"] INFO: Photonic launched successfully. Start.sh complete." >&2
