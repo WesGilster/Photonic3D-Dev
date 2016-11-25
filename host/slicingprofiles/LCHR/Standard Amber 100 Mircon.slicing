@@ -14,21 +14,21 @@
   <Direction>Bottom_Up</Direction>
   <LiftDistance>5</LiftDistance>
   <SlideTiltValue>0</SlideTiltValue>
-  <AntiAliasing>True</AntiAliasing>
+  <AntiAliasing>False</AntiAliasing>
   <UseMainLiftGCode>False</UseMainLiftGCode>
-  <AntiAliasingValue>10</AntiAliasingValue>
+  <AntiAliasingValue>1.5</AntiAliasingValue>
   <LiftFeedRate>50</LiftFeedRate>
-  <BottomLiftFeedRate>50</BottomLiftFeedRate>
+  <BottomLiftFeedRate>25</BottomLiftFeedRate>
   <LiftRetractRate>100</LiftRetractRate>
-  <ExportOption>ZIP</ExportOption>
-  <RenderOutlines>False</RenderOutlines>
-  <OutlineWidth_Inset>2</OutlineWidth_Inset>
-  <OutlineWidth_Outset>0</OutlineWidth_Outset>
+  <ExportOption>SUBDIR</ExportOption>
   <FlipX>False</FlipX>
   <FlipY>False</FlipY>
   <ColorImage>False</ColorImage>
   <Notes>
   </Notes>
+  <RenderOutlines>False</RenderOutlines>
+  <OutlineWidth_Inset>2</OutlineWidth_Inset>
+  <OutlineWidth_Outset>0</OutlineWidth_Outset>
   <GCodeHeader>;********** Header Start ********
 ;Here you can set any G or M-Code which should be executed BEFORE the build process
 G21 ;Set units to be mm
@@ -38,7 +38,6 @@ M17 ;Enable motors
 </GCodeHeader>
   <GCodeFooter>;********** Footer Start ********
 ;Here you can set any G or M-Code which should be executed after the last Layer is Printed
-G1 F100 Z10 ;Move Platform Up 10 mm
 M18 ;Disable Motors
 ;&lt;Completed&gt;
 ;********** Footer End ********
@@ -49,9 +48,8 @@ M18 ;Disable Motors
 </GCodePreslice>
   <GCodeLift>;********** Lift Sequence ********
 G1{$SlideTiltVal != 0? X$SlideTiltVal:} Z($ZLiftDist * $ZDir) F{$CURSLICE &lt; $NumFirstLayers?$ZBottomLiftRate:$ZLiftRate}
-;&lt;Delay&gt; %d($ZLiftDist*60000/$ZLiftRate+200)
 G1{$SlideTiltVal != 0? X($SlideTiltVal * -1):} Z(($LayerThickness-$ZLiftDist) * $ZDir) F$ZRetractRate
-;&lt;Delay&gt; %d($ZLiftDist*60000/$ZRetractRate+200+$BlankTime)
+;&lt;Delay&gt; %d$BlankTime
 ;********** Lift Sequence **********
 </GCodeLift>
   <GCodeLayer>;********** Layer Start ********
@@ -62,16 +60,13 @@ M17 ;Enable motors
 ;********** Layer End **********
 </GCodeLayer>
   <SelectedInk>Default</SelectedInk>
-  <InkConfig>
-    <Name>Default</Name>
-    <SliceHeight>0.100000001490116</SliceHeight>
-    <LayerTime>45000</LayerTime>
-    <FirstLayerTime>200000</FirstLayerTime>
-    <NumberofBottomLayers>4</NumberofBottomLayers>
-    <ResinPriceL>0</ResinPriceL>
-  </InkConfig>
+  <Name>Default</Name>
+  <SliceHeight>0.05</SliceHeight>
+  <LayerTime>1000</LayerTime>
+  <FirstLayerTime>5000</FirstLayerTime>
+  <NumberofBottomLayers>3</NumberofBottomLayers>
+  <ResinPriceL>0</ResinPriceL>
   <MinTestExposure>500</MinTestExposure>
   <TestExposureStep>200</TestExposureStep>
   <ExportPreview>None</ExportPreview>
-  <UserParameters />
 </SliceBuildConfig>

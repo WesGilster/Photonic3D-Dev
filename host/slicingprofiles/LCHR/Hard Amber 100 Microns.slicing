@@ -12,9 +12,9 @@
   <XOffset>0</XOffset>
   <YOffset>0</YOffset>
   <Direction>Bottom_Up</Direction>
-  <LiftDistance>5</LiftDistance>
+  <LiftDistance>4</LiftDistance>
   <SlideTiltValue>0</SlideTiltValue>
-  <AntiAliasing>True</AntiAliasing>
+  <AntiAliasing>False</AntiAliasing>
   <UseMainLiftGCode>False</UseMainLiftGCode>
   <AntiAliasingValue>10</AntiAliasingValue>
   <LiftFeedRate>50</LiftFeedRate>
@@ -26,7 +26,6 @@
   <OutlineWidth_Outset>0</OutlineWidth_Outset>
   <FlipX>False</FlipX>
   <FlipY>False</FlipY>
-  <ColorImage>False</ColorImage>
   <Notes>
   </Notes>
   <GCodeHeader>;********** Header Start ********
@@ -38,7 +37,7 @@ M17 ;Enable motors
 </GCodeHeader>
   <GCodeFooter>;********** Footer Start ********
 ;Here you can set any G or M-Code which should be executed after the last Layer is Printed
-G1 F100 Z10 ;Move Platform Up 10 mm
+G1 Z 5; Lift 5mm
 M18 ;Disable Motors
 ;&lt;Completed&gt;
 ;********** Footer End ********
@@ -65,8 +64,8 @@ M17 ;Enable motors
   <InkConfig>
     <Name>Default</Name>
     <SliceHeight>0.100000001490116</SliceHeight>
-    <LayerTime>25000</LayerTime>
-    <FirstLayerTime>200000</FirstLayerTime>
+    <LayerTime>20000</LayerTime>
+    <FirstLayerTime>150000</FirstLayerTime>
     <NumberofBottomLayers>4</NumberofBottomLayers>
     <ResinPriceL>0</ResinPriceL>
   </InkConfig>
