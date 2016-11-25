@@ -296,4 +296,4 @@ else
 	echo Starting printer host server
 	java -Xmx256m -Xms256m -Dlog4j.configurationFile=log4j2.properties -Djava.library.path=/usr/lib/jni:os/Linux/${cpu} -cp lib/*:. org.area515.resinprinter.server.Main > log.out 2> log.err &
 fi
-echo "["$(timestamp)"] INFO: Photonic launced successfully. Start.sh complete." >&2
+echo "["$(timestamp)"] INFO: Photonic launched successfully. Start.sh complete." >&2
