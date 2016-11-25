@@ -5,14 +5,14 @@
 function networkup {
   # Initialize number of attempts
   reachable=$1
-  while [ $reachable -ne 0 ]; do
+  while [ $reachable -gt 0 ]; do
     # Ping supplied host
     ping -q -c 1 -W 1 "$2" > /dev/null 2>&1
     # Check return code
     if [ $? -eq 0 ]; then
       # Success, we can exit with the right return code
       echo 0
-      return
+      return 0
     fi
     # Network down, decrement counter and try again
     let reachable-=1
@@ -20,7 +20,7 @@ function networkup {
     sleep 1
   done
   # Network down, number of attempts exhausted, quiting
-  echo 1
+  return 1
 }
 
 function timestamp {
@@ -115,7 +115,7 @@ fi
 
 if [ $(networkup 20 www.github.com) -eq 1 ]; then
 	echo "["$(timestamp)"] unable to update, no network connection. Starting Photonic3D OFFLINE"
-	echo "["$(timestamp)"] WARN: Script not started as superuser" >&2
+	echo "["$(timestamp)"] WARN: OFFLINE mode, no network connection" >&2
 else 
 	if [ ! -f "/usr/lib/jni/librxtxSerial.so" ]; then
 		echo "["$(timestamp)"] Installing RxTx"
